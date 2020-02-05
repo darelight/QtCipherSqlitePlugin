@@ -80,9 +80,9 @@ struct SHA3Context {
 */
 static void KeccakF1600Step(SHA3Context *p){
   int i;
-  u64 B0, B1, B2, B3, B4;
-  u64 C0, C1, C2, C3, C4;
-  u64 D0, D1, D2, D3, D4;
+  u64 DTB0, DTB1, DTB2, DTB3, DTB4;
+  u64 DTC0, DTC1, DTC2, DTC3, DTC4;
+  u64 DTD0, DTD1, DTD2, DTD3, DTD4;
   static const u64 RC[] = {
     0x0000000000000001ULL,  0x0000000000008082ULL,
     0x800000000000808aULL,  0x8000000080008000ULL,
@@ -97,301 +97,301 @@ static void KeccakF1600Step(SHA3Context *p){
     0x8000000080008081ULL,  0x8000000000008080ULL,
     0x0000000080000001ULL,  0x8000000080008008ULL
   };
-# define A00 (p->u.s[0])
-# define A01 (p->u.s[1])
-# define A02 (p->u.s[2])
-# define A03 (p->u.s[3])
-# define A04 (p->u.s[4])
-# define A10 (p->u.s[5])
-# define A11 (p->u.s[6])
-# define A12 (p->u.s[7])
-# define A13 (p->u.s[8])
-# define A14 (p->u.s[9])
-# define A20 (p->u.s[10])
-# define A21 (p->u.s[11])
-# define A22 (p->u.s[12])
-# define A23 (p->u.s[13])
-# define A24 (p->u.s[14])
-# define A30 (p->u.s[15])
-# define A31 (p->u.s[16])
-# define A32 (p->u.s[17])
-# define A33 (p->u.s[18])
-# define A34 (p->u.s[19])
-# define A40 (p->u.s[20])
-# define A41 (p->u.s[21])
-# define A42 (p->u.s[22])
-# define A43 (p->u.s[23])
-# define A44 (p->u.s[24])
+# define DTA00 (p->u.s[0])
+# define DTA01 (p->u.s[1])
+# define DTA02 (p->u.s[2])
+# define DTA03 (p->u.s[3])
+# define DTA04 (p->u.s[4])
+# define DTA10 (p->u.s[5])
+# define DTA11 (p->u.s[6])
+# define DTA12 (p->u.s[7])
+# define DTA13 (p->u.s[8])
+# define DTA14 (p->u.s[9])
+# define DTA20 (p->u.s[10])
+# define DTA21 (p->u.s[11])
+# define DTA22 (p->u.s[12])
+# define DTA23 (p->u.s[13])
+# define DTA24 (p->u.s[14])
+# define DTA30 (p->u.s[15])
+# define DTA31 (p->u.s[16])
+# define DTA32 (p->u.s[17])
+# define DTA33 (p->u.s[18])
+# define DTA34 (p->u.s[19])
+# define DTA40 (p->u.s[20])
+# define DTA41 (p->u.s[21])
+# define DTA42 (p->u.s[22])
+# define DTA43 (p->u.s[23])
+# define DTA44 (p->u.s[24])
 # define ROL64(a,x) ((a<<x)|(a>>(64-x)))
 
   for(i=0; i<24; i+=4){
-    C0 = A00^A10^A20^A30^A40;
-    C1 = A01^A11^A21^A31^A41;
-    C2 = A02^A12^A22^A32^A42;
-    C3 = A03^A13^A23^A33^A43;
-    C4 = A04^A14^A24^A34^A44;
-    D0 = C4^ROL64(C1, 1);
-    D1 = C0^ROL64(C2, 1);
-    D2 = C1^ROL64(C3, 1);
-    D3 = C2^ROL64(C4, 1);
-    D4 = C3^ROL64(C0, 1);
+    DTC0 = DTA00^DTA10^DTA20^DTA30^DTA40;
+    DTC1 = DTA01^DTA11^DTA21^DTA31^DTA41;
+    DTC2 = DTA02^DTA12^DTA22^DTA32^DTA42;
+    DTC3 = DTA03^DTA13^DTA23^DTA33^DTA43;
+    DTC4 = DTA04^DTA14^DTA24^DTA34^DTA44;
+    DTD0 = DTC4^ROL64(DTC1, 1);
+    DTD1 = DTC0^ROL64(DTC2, 1);
+    DTD2 = DTC1^ROL64(DTC3, 1);
+    DTD3 = DTC2^ROL64(DTC4, 1);
+    DTD4 = DTC3^ROL64(DTC0, 1);
 
-    B0 = (A00^D0);
-    B1 = ROL64((A11^D1), 44);
-    B2 = ROL64((A22^D2), 43);
-    B3 = ROL64((A33^D3), 21);
-    B4 = ROL64((A44^D4), 14);
-    A00 =   B0 ^((~B1)&  B2 );
-    A00 ^= RC[i];
-    A11 =   B1 ^((~B2)&  B3 );
-    A22 =   B2 ^((~B3)&  B4 );
-    A33 =   B3 ^((~B4)&  B0 );
-    A44 =   B4 ^((~B0)&  B1 );
+    DTB0 = (DTA00^DTD0);
+    DTB1 = ROL64((DTA11^DTD1), 44);
+    DTB2 = ROL64((DTA22^DTD2), 43);
+    DTB3 = ROL64((DTA33^DTD3), 21);
+    DTB4 = ROL64((DTA44^DTD4), 14);
+    DTA00 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA00 ^= RC[i];
+    DTA11 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA22 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA33 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA44 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B2 = ROL64((A20^D0), 3);
-    B3 = ROL64((A31^D1), 45);
-    B4 = ROL64((A42^D2), 61);
-    B0 = ROL64((A03^D3), 28);
-    B1 = ROL64((A14^D4), 20);
-    A20 =   B0 ^((~B1)&  B2 );
-    A31 =   B1 ^((~B2)&  B3 );
-    A42 =   B2 ^((~B3)&  B4 );
-    A03 =   B3 ^((~B4)&  B0 );
-    A14 =   B4 ^((~B0)&  B1 );
+    DTB2 = ROL64((DTA20^DTD0), 3);
+    DTB3 = ROL64((DTA31^DTD1), 45);
+    DTB4 = ROL64((DTA42^DTD2), 61);
+    DTB0 = ROL64((DTA03^DTD3), 28);
+    DTB1 = ROL64((DTA14^DTD4), 20);
+    DTA20 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA31 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA42 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA03 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA14 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B4 = ROL64((A40^D0), 18);
-    B0 = ROL64((A01^D1), 1);
-    B1 = ROL64((A12^D2), 6);
-    B2 = ROL64((A23^D3), 25);
-    B3 = ROL64((A34^D4), 8);
-    A40 =   B0 ^((~B1)&  B2 );
-    A01 =   B1 ^((~B2)&  B3 );
-    A12 =   B2 ^((~B3)&  B4 );
-    A23 =   B3 ^((~B4)&  B0 );
-    A34 =   B4 ^((~B0)&  B1 );
+    DTB4 = ROL64((DTA40^DTD0), 18);
+    DTB0 = ROL64((DTA01^DTD1), 1);
+    DTB1 = ROL64((DTA12^DTD2), 6);
+    DTB2 = ROL64((DTA23^DTD3), 25);
+    DTB3 = ROL64((DTA34^DTD4), 8);
+    DTA40 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA01 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA12 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA23 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA34 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B1 = ROL64((A10^D0), 36);
-    B2 = ROL64((A21^D1), 10);
-    B3 = ROL64((A32^D2), 15);
-    B4 = ROL64((A43^D3), 56);
-    B0 = ROL64((A04^D4), 27);
-    A10 =   B0 ^((~B1)&  B2 );
-    A21 =   B1 ^((~B2)&  B3 );
-    A32 =   B2 ^((~B3)&  B4 );
-    A43 =   B3 ^((~B4)&  B0 );
-    A04 =   B4 ^((~B0)&  B1 );
+    DTB1 = ROL64((DTA10^DTD0), 36);
+    DTB2 = ROL64((DTA21^DTD1), 10);
+    DTB3 = ROL64((DTA32^DTD2), 15);
+    DTB4 = ROL64((DTA43^DTD3), 56);
+    DTB0 = ROL64((DTA04^DTD4), 27);
+    DTA10 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA21 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA32 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA43 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA04 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B3 = ROL64((A30^D0), 41);
-    B4 = ROL64((A41^D1), 2);
-    B0 = ROL64((A02^D2), 62);
-    B1 = ROL64((A13^D3), 55);
-    B2 = ROL64((A24^D4), 39);
-    A30 =   B0 ^((~B1)&  B2 );
-    A41 =   B1 ^((~B2)&  B3 );
-    A02 =   B2 ^((~B3)&  B4 );
-    A13 =   B3 ^((~B4)&  B0 );
-    A24 =   B4 ^((~B0)&  B1 );
+    DTB3 = ROL64((DTA30^DTD0), 41);
+    DTB4 = ROL64((DTA41^DTD1), 2);
+    DTB0 = ROL64((DTA02^DTD2), 62);
+    DTB1 = ROL64((DTA13^DTD3), 55);
+    DTB2 = ROL64((DTA24^DTD4), 39);
+    DTA30 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA41 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA02 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA13 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA24 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    C0 = A00^A20^A40^A10^A30;
-    C1 = A11^A31^A01^A21^A41;
-    C2 = A22^A42^A12^A32^A02;
-    C3 = A33^A03^A23^A43^A13;
-    C4 = A44^A14^A34^A04^A24;
-    D0 = C4^ROL64(C1, 1);
-    D1 = C0^ROL64(C2, 1);
-    D2 = C1^ROL64(C3, 1);
-    D3 = C2^ROL64(C4, 1);
-    D4 = C3^ROL64(C0, 1);
+    DTC0 = DTA00^DTA20^DTA40^DTA10^DTA30;
+    DTC1 = DTA11^DTA31^DTA01^DTA21^DTA41;
+    DTC2 = DTA22^DTA42^DTA12^DTA32^DTA02;
+    DTC3 = DTA33^DTA03^DTA23^DTA43^DTA13;
+    DTC4 = DTA44^DTA14^DTA34^DTA04^DTA24;
+    DTD0 = DTC4^ROL64(DTC1, 1);
+    DTD1 = DTC0^ROL64(DTC2, 1);
+    DTD2 = DTC1^ROL64(DTC3, 1);
+    DTD3 = DTC2^ROL64(DTC4, 1);
+    DTD4 = DTC3^ROL64(DTC0, 1);
 
-    B0 = (A00^D0);
-    B1 = ROL64((A31^D1), 44);
-    B2 = ROL64((A12^D2), 43);
-    B3 = ROL64((A43^D3), 21);
-    B4 = ROL64((A24^D4), 14);
-    A00 =   B0 ^((~B1)&  B2 );
-    A00 ^= RC[i+1];
-    A31 =   B1 ^((~B2)&  B3 );
-    A12 =   B2 ^((~B3)&  B4 );
-    A43 =   B3 ^((~B4)&  B0 );
-    A24 =   B4 ^((~B0)&  B1 );
+    DTB0 = (DTA00^DTD0);
+    DTB1 = ROL64((DTA31^DTD1), 44);
+    DTB2 = ROL64((DTA12^DTD2), 43);
+    DTB3 = ROL64((DTA43^DTD3), 21);
+    DTB4 = ROL64((DTA24^DTD4), 14);
+    DTA00 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA00 ^= RC[i+1];
+    DTA31 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA12 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA43 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA24 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B2 = ROL64((A40^D0), 3);
-    B3 = ROL64((A21^D1), 45);
-    B4 = ROL64((A02^D2), 61);
-    B0 = ROL64((A33^D3), 28);
-    B1 = ROL64((A14^D4), 20);
-    A40 =   B0 ^((~B1)&  B2 );
-    A21 =   B1 ^((~B2)&  B3 );
-    A02 =   B2 ^((~B3)&  B4 );
-    A33 =   B3 ^((~B4)&  B0 );
-    A14 =   B4 ^((~B0)&  B1 );
+    DTB2 = ROL64((DTA40^DTD0), 3);
+    DTB3 = ROL64((DTA21^DTD1), 45);
+    DTB4 = ROL64((DTA02^DTD2), 61);
+    DTB0 = ROL64((DTA33^DTD3), 28);
+    DTB1 = ROL64((DTA14^DTD4), 20);
+    DTA40 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA21 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA02 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA33 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA14 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B4 = ROL64((A30^D0), 18);
-    B0 = ROL64((A11^D1), 1);
-    B1 = ROL64((A42^D2), 6);
-    B2 = ROL64((A23^D3), 25);
-    B3 = ROL64((A04^D4), 8);
-    A30 =   B0 ^((~B1)&  B2 );
-    A11 =   B1 ^((~B2)&  B3 );
-    A42 =   B2 ^((~B3)&  B4 );
-    A23 =   B3 ^((~B4)&  B0 );
-    A04 =   B4 ^((~B0)&  B1 );
+    DTB4 = ROL64((DTA30^DTD0), 18);
+    DTB0 = ROL64((DTA11^DTD1), 1);
+    DTB1 = ROL64((DTA42^DTD2), 6);
+    DTB2 = ROL64((DTA23^DTD3), 25);
+    DTB3 = ROL64((DTA04^DTD4), 8);
+    DTA30 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA11 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA42 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA23 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA04 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B1 = ROL64((A20^D0), 36);
-    B2 = ROL64((A01^D1), 10);
-    B3 = ROL64((A32^D2), 15);
-    B4 = ROL64((A13^D3), 56);
-    B0 = ROL64((A44^D4), 27);
-    A20 =   B0 ^((~B1)&  B2 );
-    A01 =   B1 ^((~B2)&  B3 );
-    A32 =   B2 ^((~B3)&  B4 );
-    A13 =   B3 ^((~B4)&  B0 );
-    A44 =   B4 ^((~B0)&  B1 );
+    DTB1 = ROL64((DTA20^DTD0), 36);
+    DTB2 = ROL64((DTA01^DTD1), 10);
+    DTB3 = ROL64((DTA32^DTD2), 15);
+    DTB4 = ROL64((DTA13^DTD3), 56);
+    DTB0 = ROL64((DTA44^DTD4), 27);
+    DTA20 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA01 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA32 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA13 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA44 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B3 = ROL64((A10^D0), 41);
-    B4 = ROL64((A41^D1), 2);
-    B0 = ROL64((A22^D2), 62);
-    B1 = ROL64((A03^D3), 55);
-    B2 = ROL64((A34^D4), 39);
-    A10 =   B0 ^((~B1)&  B2 );
-    A41 =   B1 ^((~B2)&  B3 );
-    A22 =   B2 ^((~B3)&  B4 );
-    A03 =   B3 ^((~B4)&  B0 );
-    A34 =   B4 ^((~B0)&  B1 );
+    DTB3 = ROL64((DTA10^DTD0), 41);
+    DTB4 = ROL64((DTA41^DTD1), 2);
+    DTB0 = ROL64((DTA22^DTD2), 62);
+    DTB1 = ROL64((DTA03^DTD3), 55);
+    DTB2 = ROL64((DTA34^DTD4), 39);
+    DTA10 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA41 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA22 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA03 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA34 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    C0 = A00^A40^A30^A20^A10;
-    C1 = A31^A21^A11^A01^A41;
-    C2 = A12^A02^A42^A32^A22;
-    C3 = A43^A33^A23^A13^A03;
-    C4 = A24^A14^A04^A44^A34;
-    D0 = C4^ROL64(C1, 1);
-    D1 = C0^ROL64(C2, 1);
-    D2 = C1^ROL64(C3, 1);
-    D3 = C2^ROL64(C4, 1);
-    D4 = C3^ROL64(C0, 1);
+    DTC0 = DTA00^DTA40^DTA30^DTA20^DTA10;
+    DTC1 = DTA31^DTA21^DTA11^DTA01^DTA41;
+    DTC2 = DTA12^DTA02^DTA42^DTA32^DTA22;
+    DTC3 = DTA43^DTA33^DTA23^DTA13^DTA03;
+    DTC4 = DTA24^DTA14^DTA04^DTA44^DTA34;
+    DTD0 = DTC4^ROL64(DTC1, 1);
+    DTD1 = DTC0^ROL64(DTC2, 1);
+    DTD2 = DTC1^ROL64(DTC3, 1);
+    DTD3 = DTC2^ROL64(DTC4, 1);
+    DTD4 = DTC3^ROL64(DTC0, 1);
 
-    B0 = (A00^D0);
-    B1 = ROL64((A21^D1), 44);
-    B2 = ROL64((A42^D2), 43);
-    B3 = ROL64((A13^D3), 21);
-    B4 = ROL64((A34^D4), 14);
-    A00 =   B0 ^((~B1)&  B2 );
-    A00 ^= RC[i+2];
-    A21 =   B1 ^((~B2)&  B3 );
-    A42 =   B2 ^((~B3)&  B4 );
-    A13 =   B3 ^((~B4)&  B0 );
-    A34 =   B4 ^((~B0)&  B1 );
+    DTB0 = (DTA00^DTD0);
+    DTB1 = ROL64((DTA21^DTD1), 44);
+    DTB2 = ROL64((DTA42^DTD2), 43);
+    DTB3 = ROL64((DTA13^DTD3), 21);
+    DTB4 = ROL64((DTA34^DTD4), 14);
+    DTA00 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA00 ^= RC[i+2];
+    DTA21 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA42 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA13 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA34 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B2 = ROL64((A30^D0), 3);
-    B3 = ROL64((A01^D1), 45);
-    B4 = ROL64((A22^D2), 61);
-    B0 = ROL64((A43^D3), 28);
-    B1 = ROL64((A14^D4), 20);
-    A30 =   B0 ^((~B1)&  B2 );
-    A01 =   B1 ^((~B2)&  B3 );
-    A22 =   B2 ^((~B3)&  B4 );
-    A43 =   B3 ^((~B4)&  B0 );
-    A14 =   B4 ^((~B0)&  B1 );
+    DTB2 = ROL64((DTA30^DTD0), 3);
+    DTB3 = ROL64((DTA01^DTD1), 45);
+    DTB4 = ROL64((DTA22^DTD2), 61);
+    DTB0 = ROL64((DTA43^DTD3), 28);
+    DTB1 = ROL64((DTA14^DTD4), 20);
+    DTA30 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA01 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA22 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA43 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA14 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B4 = ROL64((A10^D0), 18);
-    B0 = ROL64((A31^D1), 1);
-    B1 = ROL64((A02^D2), 6);
-    B2 = ROL64((A23^D3), 25);
-    B3 = ROL64((A44^D4), 8);
-    A10 =   B0 ^((~B1)&  B2 );
-    A31 =   B1 ^((~B2)&  B3 );
-    A02 =   B2 ^((~B3)&  B4 );
-    A23 =   B3 ^((~B4)&  B0 );
-    A44 =   B4 ^((~B0)&  B1 );
+    DTB4 = ROL64((DTA10^DTD0), 18);
+    DTB0 = ROL64((DTA31^DTD1), 1);
+    DTB1 = ROL64((DTA02^DTD2), 6);
+    DTB2 = ROL64((DTA23^DTD3), 25);
+    DTB3 = ROL64((DTA44^DTD4), 8);
+    DTA10 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA31 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA02 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA23 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA44 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B1 = ROL64((A40^D0), 36);
-    B2 = ROL64((A11^D1), 10);
-    B3 = ROL64((A32^D2), 15);
-    B4 = ROL64((A03^D3), 56);
-    B0 = ROL64((A24^D4), 27);
-    A40 =   B0 ^((~B1)&  B2 );
-    A11 =   B1 ^((~B2)&  B3 );
-    A32 =   B2 ^((~B3)&  B4 );
-    A03 =   B3 ^((~B4)&  B0 );
-    A24 =   B4 ^((~B0)&  B1 );
+    DTB1 = ROL64((DTA40^DTD0), 36);
+    DTB2 = ROL64((DTA11^DTD1), 10);
+    DTB3 = ROL64((DTA32^DTD2), 15);
+    DTB4 = ROL64((DTA03^DTD3), 56);
+    DTB0 = ROL64((DTA24^DTD4), 27);
+    DTA40 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA11 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA32 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA03 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA24 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B3 = ROL64((A20^D0), 41);
-    B4 = ROL64((A41^D1), 2);
-    B0 = ROL64((A12^D2), 62);
-    B1 = ROL64((A33^D3), 55);
-    B2 = ROL64((A04^D4), 39);
-    A20 =   B0 ^((~B1)&  B2 );
-    A41 =   B1 ^((~B2)&  B3 );
-    A12 =   B2 ^((~B3)&  B4 );
-    A33 =   B3 ^((~B4)&  B0 );
-    A04 =   B4 ^((~B0)&  B1 );
+    DTB3 = ROL64((DTA20^DTD0), 41);
+    DTB4 = ROL64((DTA41^DTD1), 2);
+    DTB0 = ROL64((DTA12^DTD2), 62);
+    DTB1 = ROL64((DTA33^DTD3), 55);
+    DTB2 = ROL64((DTA04^DTD4), 39);
+    DTA20 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA41 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA12 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA33 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA04 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    C0 = A00^A30^A10^A40^A20;
-    C1 = A21^A01^A31^A11^A41;
-    C2 = A42^A22^A02^A32^A12;
-    C3 = A13^A43^A23^A03^A33;
-    C4 = A34^A14^A44^A24^A04;
-    D0 = C4^ROL64(C1, 1);
-    D1 = C0^ROL64(C2, 1);
-    D2 = C1^ROL64(C3, 1);
-    D3 = C2^ROL64(C4, 1);
-    D4 = C3^ROL64(C0, 1);
+    DTC0 = DTA00^DTA30^DTA10^DTA40^DTA20;
+    DTC1 = DTA21^DTA01^DTA31^DTA11^DTA41;
+    DTC2 = DTA42^DTA22^DTA02^DTA32^DTA12;
+    DTC3 = DTA13^DTA43^DTA23^DTA03^DTA33;
+    DTC4 = DTA34^DTA14^DTA44^DTA24^DTA04;
+    DTD0 = DTC4^ROL64(DTC1, 1);
+    DTD1 = DTC0^ROL64(DTC2, 1);
+    DTD2 = DTC1^ROL64(DTC3, 1);
+    DTD3 = DTC2^ROL64(DTC4, 1);
+    DTD4 = DTC3^ROL64(DTC0, 1);
 
-    B0 = (A00^D0);
-    B1 = ROL64((A01^D1), 44);
-    B2 = ROL64((A02^D2), 43);
-    B3 = ROL64((A03^D3), 21);
-    B4 = ROL64((A04^D4), 14);
-    A00 =   B0 ^((~B1)&  B2 );
-    A00 ^= RC[i+3];
-    A01 =   B1 ^((~B2)&  B3 );
-    A02 =   B2 ^((~B3)&  B4 );
-    A03 =   B3 ^((~B4)&  B0 );
-    A04 =   B4 ^((~B0)&  B1 );
+    DTB0 = (DTA00^DTD0);
+    DTB1 = ROL64((DTA01^DTD1), 44);
+    DTB2 = ROL64((DTA02^DTD2), 43);
+    DTB3 = ROL64((DTA03^DTD3), 21);
+    DTB4 = ROL64((DTA04^DTD4), 14);
+    DTA00 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA00 ^= RC[i+3];
+    DTA01 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA02 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA03 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA04 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B2 = ROL64((A10^D0), 3);
-    B3 = ROL64((A11^D1), 45);
-    B4 = ROL64((A12^D2), 61);
-    B0 = ROL64((A13^D3), 28);
-    B1 = ROL64((A14^D4), 20);
-    A10 =   B0 ^((~B1)&  B2 );
-    A11 =   B1 ^((~B2)&  B3 );
-    A12 =   B2 ^((~B3)&  B4 );
-    A13 =   B3 ^((~B4)&  B0 );
-    A14 =   B4 ^((~B0)&  B1 );
+    DTB2 = ROL64((DTA10^DTD0), 3);
+    DTB3 = ROL64((DTA11^DTD1), 45);
+    DTB4 = ROL64((DTA12^DTD2), 61);
+    DTB0 = ROL64((DTA13^DTD3), 28);
+    DTB1 = ROL64((DTA14^DTD4), 20);
+    DTA10 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA11 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA12 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA13 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA14 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B4 = ROL64((A20^D0), 18);
-    B0 = ROL64((A21^D1), 1);
-    B1 = ROL64((A22^D2), 6);
-    B2 = ROL64((A23^D3), 25);
-    B3 = ROL64((A24^D4), 8);
-    A20 =   B0 ^((~B1)&  B2 );
-    A21 =   B1 ^((~B2)&  B3 );
-    A22 =   B2 ^((~B3)&  B4 );
-    A23 =   B3 ^((~B4)&  B0 );
-    A24 =   B4 ^((~B0)&  B1 );
+    DTB4 = ROL64((DTA20^DTD0), 18);
+    DTB0 = ROL64((DTA21^DTD1), 1);
+    DTB1 = ROL64((DTA22^DTD2), 6);
+    DTB2 = ROL64((DTA23^DTD3), 25);
+    DTB3 = ROL64((DTA24^DTD4), 8);
+    DTA20 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA21 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA22 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA23 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA24 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B1 = ROL64((A30^D0), 36);
-    B2 = ROL64((A31^D1), 10);
-    B3 = ROL64((A32^D2), 15);
-    B4 = ROL64((A33^D3), 56);
-    B0 = ROL64((A34^D4), 27);
-    A30 =   B0 ^((~B1)&  B2 );
-    A31 =   B1 ^((~B2)&  B3 );
-    A32 =   B2 ^((~B3)&  B4 );
-    A33 =   B3 ^((~B4)&  B0 );
-    A34 =   B4 ^((~B0)&  B1 );
+    DTB1 = ROL64((DTA30^DTD0), 36);
+    DTB2 = ROL64((DTA31^DTD1), 10);
+    DTB3 = ROL64((DTA32^DTD2), 15);
+    DTB4 = ROL64((DTA33^DTD3), 56);
+    DTB0 = ROL64((DTA34^DTD4), 27);
+    DTA30 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA31 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA32 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA33 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA34 =   DTB4 ^((~DTB0)&  DTB1 );
 
-    B3 = ROL64((A40^D0), 41);
-    B4 = ROL64((A41^D1), 2);
-    B0 = ROL64((A42^D2), 62);
-    B1 = ROL64((A43^D3), 55);
-    B2 = ROL64((A44^D4), 39);
-    A40 =   B0 ^((~B1)&  B2 );
-    A41 =   B1 ^((~B2)&  B3 );
-    A42 =   B2 ^((~B3)&  B4 );
-    A43 =   B3 ^((~B4)&  B0 );
-    A44 =   B4 ^((~B0)&  B1 );
+    DTB3 = ROL64((DTA40^DTD0), 41);
+    DTB4 = ROL64((DTA41^DTD1), 2);
+    DTB0 = ROL64((DTA42^DTD2), 62);
+    DTB1 = ROL64((DTA43^DTD3), 55);
+    DTB2 = ROL64((DTA44^DTD4), 39);
+    DTA40 =   DTB0 ^((~DTB1)&  DTB2 );
+    DTA41 =   DTB1 ^((~DTB2)&  DTB3 );
+    DTA42 =   DTB2 ^((~DTB3)&  DTB4 );
+    DTA43 =   DTB3 ^((~DTB4)&  DTB0 );
+    DTA44 =   DTB4 ^((~DTB0)&  DTB1 );
   }
 }
 
